@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FoodieExpress</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f8f8f8;
+    }
+    header {
+      background: #ff4d4d;
+      color: white;
+      padding: 15px 20px;
+      text-align: center;
+      font-size: 1.5em;
+    }
+    .menu {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+    }
+    .item {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin: 10px;
+      padding: 15px;
+      width: 200px;
+      text-align: center;
+    }
+    .item img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+    .item h3 {
+      margin: 10px 0 5px;
+    }
+    .item p {
+      margin: 5px 0;
+      color: #555;
+    }
+    .item button {
+      background: #0078D7;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .item button:hover {
+      background: #005fa3;
+    }
+    .cart {
+      background: #fff;
+      padding: 20px;
+      margin: 20px auto;
+      border-radius: 8px;
+      max-width: 600px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .cart h2 {
+      margin-top: 0;
+    }
+    .cart ul {
+      list-style: none;
+      padding: 0;
+    }
+    .cart li {
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+  </style>
+</head>
+<body>
+
+  <header>🍕 FoodieExpress</header>
+
+  <div class="menu">
+    <div class="item">
+      <img src="margherita pizza.jpeg" alt="Margherita Pizza">
+      <h3>Margherita Pizza</h3>
+      <p>₹299</p>
+      <button onclick="addToCart('Margherita Pizza', 299)">Add to Cart</button>
+    </div>
+    <div class="item">
+      <img src="chicken biryani.jpeg" alt="Chicken Biryani">
+      <h3>Chicken Biryani</h3>
+      <p>₹249</p>
+      <button onclick="addToCart('Chicken Biryani', 249)">Add to Cart</button>
+    </div>
+    <div class="item">
+      <img src="veg burger.jpeg" alt="Veg Burger">
+      <h3>Veg Burger</h3>
+      <p>₹149</p>
+      <button onclick="addToCart('Veg Burger', 149)">Add to Cart</button>
+    </div>
+  </div>
+
+  <div class="cart" id="cartSection">
+    <h2>🛒 Your Cart</h2>
+    <ul id="cartList">
+      <li>No items yet.</li>
+    </ul>
+  </div>
+
+  <script>
+    const CartManager = (function () {
+      let instance;
+
+      function init() {
+        return {
+          items: [],
+          addItem: function(name, price) {
+            this.items.push({ name, price });
+            updateCartUI();
+          },
+          getItems: function() {
+            return this.items;
+          }
+        };
+      }
+
+      return {
+        getInstance: function () {
+          if (!instance) {
+            instance = init();
+          }
+          return instance;
+        }
+      };
+    })();
+
+    function addToCart(name, price) {
+      const cart = CartManager.getInstance();
+      cart.addItem(name, price);
+    }
+
+    function updateCartUI() {
+      const cart = CartManager.getInstance();
+      const cartList = document.getElementById("cartList");
+      cartList.innerHTML = "";
+
+      if (cart.items.length === 0) {
+        cartList.innerHTML = "<li>No items yet.</li>";
+        return;
+      }
+
+      cart.items.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = `${item.name} - ₹${item.price}`;
+        cartList.appendChild(li);
+      });
+    }
+  </script>
+
+</body>
+</html>
